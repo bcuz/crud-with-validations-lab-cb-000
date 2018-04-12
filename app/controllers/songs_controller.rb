@@ -6,15 +6,31 @@ class SongsController < ApplicationController
   end
 
   def show
-    
+
   end
 
   def edit
-    
+
   end
 
   def create
-    
+    @song = Song.new(song_params)
+    # binding.pry
+
+    # if @song.valid?
+    if @song.save
+      # If--and only if--the post is valid, do what we usually do.
+      # @song.save
+      # This returns a status_code of 302, which instructs the browser to
+      # worry about re-reading it from the database)
+      redirect_to song_path(@song)
+    else
+      # If the post is invalid, hold on to @post, because it is now full of
+      # useful error messages, and re-render the :new page, which knows how
+      # to display them alongside the user's entries.
+      render :new
+    end
+
   end
 
   private
@@ -22,6 +38,10 @@ class SongsController < ApplicationController
     def set_song
       @song = Song.find(params[:id])
     end
+
+    def song_params
+   params.permit(:title, :released, :release_year, :artist_name, :genre)
+ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     # def article_params
